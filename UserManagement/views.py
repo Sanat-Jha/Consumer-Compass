@@ -1,14 +1,20 @@
     
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
+from ProductManagement.models import Category, Product
 from UserManagement.forms import ConsumerRegistrationForm, ConsumerLoginForm
+from UserManagement.models import Consumer
 # Create your views here.
 
 def home(request,cat):
-    print(cat)
+    context = {
+        "cat":cat,
+        'products':  Product.objects.filter(category__name=cat),
+        "categories": Category.objects.all()
+    }
     if request.user.is_authenticated:
-        return render(request, 'home.html', {'username': request.user.username})
-    return render(request, 'home.html')
+        context['user']= Consumer.objects.get(username=request.user.username)
+    return render(request, 'home.html',context)
 
 def register(request):
     if request.method == 'POST':

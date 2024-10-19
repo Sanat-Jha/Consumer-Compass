@@ -1,74 +1,99 @@
+
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Home</title>
-    <style>
-        /* Dropdown container */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consumer Compass - Home</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="icon" href="{% static 'favicon.png' %}" type="image/x-icon">
 
-        /* Dropdown button */
-        .dropdown-button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 16px;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-        }
-
-        /* Dropdown content */
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-
-        /* Links inside the dropdown */
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-
-        /* Change color of links on hover */
-        .dropdown-content a:hover {
-            background-color: #f1f1f1;
-        }
-
-        /* Show the dropdown menu on hover */
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        /* Change the background color of the button when the dropdown is shown */
-        .dropdown:hover .dropdown-button {
-            background-color: #3e8e41;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Georgia:wght@400;700&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
-    {% if user.is_authenticated %}
-        <h1>Welcome, {{ username }}!</h1>
-        <a href="{% url 'logout' %}">Logout</a>
-    {% else %}
-        <a href="{% url 'login' %}">Login</a>
-        <a href="{% url 'register' %}">Signup</a>
-    {% endif %}
-    <br>
-        <div class="dropdown">
-        <button class="dropdown-button">Dropdown</button>
-        <div class="dropdown-content">
-        {% for cat in cats  %}
-            <a href="{{cat.name}}">{{cat.name}}</a>
-            {% endfor %}
+    <canvas id="backgroundCanvas"></canvas>
+
+    <!-- Top Navbar -->
+    <div class="navbar">
+        <div class="logo">
+            <img src="{% static 'logo.png' %}" alt="Consumer Compass Logo">
         </div>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Search...">
+        </div>
+        {% if user.is_authenticated %}
+        <div class="welcome-message">
+            <p>Welcome, {{ user.username }}!</p>
+            <p>Your CC Score: {{ user.ccscore }}</p> 
+            <a href="/logout">Logout</a>
+        </div>
+    {% else %}
+        <div class="auth-buttons">
+            <a href="/login">Login</a>
+            <a href="/register">Sign Up</a>
+        </div>
+    {% endif %}
+    
     </div>
+    <!-- Second Navbar (Category List) -->
+    <div class="category-navbar">
+        {% for cat in categories %}
+        <a href="{{ cat.name }}">{{ cat.name }}</a>
+        {% endfor %}
+    </div>
+
+    <!-- Container for the product cards -->
+    <div class="product-grid">
+        {% for product in products %}
+        <form action="{% url 'product' %}" method="POST" class="product-form">
+            {% csrf_token %}
+            <div class="product-card" data-title="{{ product.title }}" aria-labelledby="title-{{ forloop.counter }}">
+                <button type="submit" class="product-button" aria-label="View details for {{ product.title }}">
+                    <img src="{{ product.image.url }}" alt="{{ product.title }}" class="product-image">
+                    <h1 id="title-{{ forloop.counter }}" class="title">{{ product.title }}</h1>
+                    <h2 class="price">₹{{ product.price }}</h2>
+                    <div class="ratings">
+                        <div class="rating">
+                            <span>CC Rating:</span>
+                            <div class="star-rating" aria-label="CC Rating: {{ product.ccscore }} out of 5">
+                                {% for i in "12345" %}
+                                    {% if product.ccscore|add:0 >= i|add:0 %}
+                                        <i class="star filled">★</i>
+                                    {% else %}
+                                        <i class="star">☆</i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="online-rating">
+                            <span>Online Rating:</span>
+                            <div class="star-rating" aria-label="Online Rating: {{ product.online_rating }} out of 5">
+                                {% for i in "12345" %}
+                                    {% if product.online_rating|add:0 >= i|add:0 %}
+                                        <i class="star filled">★</i>
+                                    {% else %}
+                                        <i class="star">☆</i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="product_title" value="{{ product.title }}">
+                </button>
+            </div>
+            
+        </form>
+        {% endfor %}
+    </div>
+
+
+    <script src="{% static 'js/canvas-animation.js' %}"></script>
+    <script src="{% static 'js/home.js' %}"></script>
 </body>
+
 </html>
