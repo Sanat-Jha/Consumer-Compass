@@ -28,9 +28,11 @@
         </div>
         {% if user.is_authenticated %}
         <div class="welcome-message">
-            <p>Welcome, {{ user.username }}!</p>
-            <p>Your CC Score: {{ user.ccscore }}</p> 
+            <p class = "navbar-username">{{ consumer.username }}</p>
+            <p class = "navbar-approvedby">Approved By: {{ consumer.approvedscore }}</p> 
+            <div class="auth-buttons">
             <a href="/logout">Logout</a>
+        </div>
         </div>
     {% else %}
         <div class="auth-buttons">
@@ -43,7 +45,7 @@
     <!-- Second Navbar (Category List) -->
     <div class="category-navbar">
         {% for cat in categories %}
-        <a href="{{ cat.name }}">{{ cat.name }}</a>
+        <a href="/{{ cat.name }}">{{ cat.name }}</a>
         {% endfor %}
     </div>
 

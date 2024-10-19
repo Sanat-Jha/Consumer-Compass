@@ -8,8 +8,9 @@ from UserManagement.models import Consumer
 def product(request):
     product = Product.objects.get(title=request.POST.get("product_title"))
     ccreviews = Review.objects.filter(product=product)
-    if len(Review.objects.filter(product=product,consumer=Consumer.objects.get(username=request.user.username)))==0:
-        return render(request, 'product.html',{'product':product,'ccreviews':ccreviews,'username':request.user.username,"writereview":True})
+    if request.user.is_authenticated:
+        if len(Review.objects.filter(product=product,consumer=Consumer.objects.filter(username=request.user.username)[0]))==0:
+            return render(request, 'product.html',{'product':product,'ccreviews':ccreviews,'username':request.user.username,"writereview":True})
     return render(request, 'product.html',{'product':product,'ccreviews':ccreviews,'username':request.user.username,"writereview":False})
 
 

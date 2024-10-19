@@ -13,7 +13,7 @@ def home(request,cat):
         "categories": Category.objects.all()
     }
     if request.user.is_authenticated:
-        context['user']= Consumer.objects.get(username=request.user.username)
+        context['consumer']= Consumer.objects.get(username=request.user.username)
     return render(request, 'home.html',context)
 
 def register(request):
@@ -36,13 +36,13 @@ def login_view(request):
             user = authenticate(email=email, password=password)
             if user:
                 login(request, user)
-                return redirect('home')
+                return redirect('home',"Laptop")
     else:
         form = ConsumerLoginForm()
     return render(request, 'login.html', {'form': form})
 
 def logout_view(request):
     logout(request)
-    return redirect('home')
+    return redirect('home',"Laptop")
 
 
