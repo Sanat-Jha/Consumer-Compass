@@ -1,4 +1,3 @@
-@@ -1,16 +1,16 @@
 # Consumer Compass
 <img src="https://github.com/user-attachments/assets/e6a45692-6bbf-4409-8334-a4781369c2ae" width="300"/>
  
@@ -41,7 +40,14 @@ Hope you find our service helpful!
 1. Clone the repository:
    ```bash
    git clone https://github.com/your-username/consumer-compass.git
-@@ -62,26 +62,29 @@
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd consumer-compass
+   ```
+3. Install the dependencies:
+   ```bash
+   pip install -r requirements.txt
    ```
 4. Run the development server:
    ```bash
