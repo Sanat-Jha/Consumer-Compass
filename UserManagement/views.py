@@ -42,7 +42,7 @@ def login_view(request):
     else:
         form = ConsumerLoginForm()
     if request.user.is_authenticated:
-        return render(request, 'login.html', {'form': form, "consumer":Consumer.objects.get(username=request.user.username),"categories":Category.object.all()})
+        return render(request, 'login.html', {'form': form, "consumer":Consumer.objects.get(username=request.user.username),"categories":Category.objects.all()})
     return render(request, 'login.html', {'form': form,"categories":Category.objects.all()})
 
 def logout_view(request):
