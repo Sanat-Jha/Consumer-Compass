@@ -1,6 +1,9 @@
-
+@font-face {
+    font-family: 'MainFont';
+    src: url('mainfont.ttf') format('truetype');
+}
 body {
-    font-family: 'MainFont'; /* Updated to use the custom font */
+    font-family: 'MainFont'; 
     background-color: #121212;
     color: white;
     margin: 0;
@@ -166,7 +169,7 @@ canvas#backgroundCanvas {
     display: flex; /* Use flexbox for layout */
     flex-direction: column; /* Stack elements vertically */
     align-items: center; /* Center-align items */
-    padding: 10px;
+    padding: 15px 20px;
     background-color: #000; /* Black background */
     border-radius: 10px; /* Rounded corners */
     box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2); /* Subtle white shadow for depth */

@@ -1,3 +1,7 @@
+@font-face {
+    font-family: 'WelcomeFont';
+    src: url('welcomefont.ttf') format('truetype');
+}
 body,
 html {
     margin: 0;
@@ -47,13 +51,14 @@ main {
 
 .content {
     margin-bottom: 2rem; /* Space below content */
+    font-family: 'WelcomeFont';
 }
 
 h1 {
     font-size: 2.5rem; /* Adjust size as needed */
     font-weight: bold;
     margin-bottom: 1rem;
-    font-family: 'welcomefont'; /* Use the custom font */
+    font-family: 'WelcomeFont'; /* Use the custom font */
 }
 
 p {
