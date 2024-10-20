@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+{% extends 'base.html' %}
+{% comment %} <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -172,4 +173,64 @@ button.btn-submit:hover {
         </form>
     </div>
 </body>
-</html>
+</html> {% endcomment %}
+{% load static %}
+{% block title %}Add product{% endblock %}
+{% block content %}
+{% if redirect %}
+    <form id="postForm" action="/product/" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="product_title" value="{{ product_title }}">
+    </form>
+
+    <script>
+        document.getElementById("postForm").submit();
+    </script>
+{% endif %}
+    <div class="container">
+    <link rel="stylesheet" href="{% static 'css/addproduct.css' %}">
+        <h2>Product Information</h2>
+<form action="/addproduct/" method="POST" enctype="multipart/form-data">{% csrf_token %}
+        <!-- Section 1: Product Information -->
+        <!-- <div class="section-title">Product Information</div> -->
+        <label for="category">Product Category</label>
+        <select id="category" name="category"required>
+            <option value="">Select category</option>
+            {% for cat in categories %}
+            <option value="{{ cat.name }}">{{ cat.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="productTitle">Product Title</label>
+        <input type="text" name="title" id="productTitle" placeholder="Enter product title" required>
+
+        <!-- Section 2: Product Details -->
+        <!-- <div class="section-title">Product Details</div> -->
+        <label for="productImage">Choose Product Image</label>
+        <input type="file" id="productImage" name= "image" accept="image/*" onchange="previewImage(event)">
+        <img id="imagePreview" class="image-preview" alt="Product Image Preview">
+
+        <label for="price">Price</label>
+        <input type="number" id="price" name="price" placeholder="Enter price" required>
+
+        <!-- Section 3: Purchase Links -->
+        <!-- <div class="section-title">Purchase Links</div> -->
+        <label for="amazonLink">Amazon Link</label>
+        <input type="url" id="amazonLink" name = "amazon_link" placeholder="Enter Amazon product link">
+
+        <label for="flipkartLink">Flipkart Link</label>
+        <input type="url" id="flipkartLink" name = "flipkart_link" placeholder="Enter Flipkart product link">
+
+        <button type="submit">Add Product</button>
+        </form>
+    </div>
+
+    <script>
+        // Function to preview the uploaded image
+        function previewImage(event) {
+            const image = document.getElementById('imagePreview');
+            image.src = URL.createObjectURL(event.target.files[0]);
+            image.style.display = 'block';
+        }
+    </script>
+{% endblock %}

@@ -19,10 +19,10 @@ from django.urls import path
 
 from ConsumerCompass import settings
 from django.conf.urls.static import static
-from .views import welcomepage
+from .views import welcomepage,aboutus
 from UserManagement.views import home,register,login_view,logout_view
 from ProductManagement.views import product,addproduct
-from ReviewManagement.views import writereview,editreview
+from ReviewManagement.views import writereview,editreview,changeapproval
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,6 +33,8 @@ urlpatterns = [
     path('editreview/', editreview, name='editreview'),
     path('addproduct/', addproduct, name='addproduct'),
     path('product/', product, name='product'),
+    path('aboutus/', aboutus, name='aboutus'),
+    path('changeapproval/', changeapproval, name='changeapproval'),
     path('writereview/<str:producttitle>', writereview, name='writereview'),
     path('<str:cat>/', home, name='home'),
 

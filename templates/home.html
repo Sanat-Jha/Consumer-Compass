@@ -1,54 +1,15 @@
 
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consumer Compass - Home</title>
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <link rel="icon" href="{% static 'favicon.png' %}" type="image/x-icon">
-
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Georgia:wght@400;700&display=swap"
-        rel="stylesheet">
-</head>
-
-<body>
-    <canvas id="backgroundCanvas"></canvas>
-
-    <!-- Top Navbar -->
-    <div class="navbar">
-        <div class="logo">
-            <img src="{% static 'logo.png' %}" alt="Consumer Compass Logo">
-        </div>
-
-        <div class="search-bar">
+{% block title %}Consumer Compass{% endblock %}
+{% block searchbox %}
+<div class="search-bar">
             <input type="text" placeholder="Search...">
         </div>
-        {% if user.is_authenticated %}
-        <div class="welcome-message">
-            <p class = "navbar-username">{{ consumer.username }}</p>
-            <p class = "navbar-approvedby">Approved By: {{ consumer.approvedscore }}</p> 
-            <div class="auth-buttons">
-            <a href="/logout">Logout</a>
-        </div>
-        </div>
-    {% else %}
-        <div class="auth-buttons">
-            <a href="/login">Login</a>
-            <a href="/register">Sign Up</a>
-        </div>
-    {% endif %}
-    
-    </div>
-    <!-- Second Navbar (Category List) -->
-    <div class="category-navbar">
-        {% for cat in categories %}
-        <a href="/{{ cat.name }}">{{ cat.name }}</a>
-        {% endfor %}
-    </div>
+{% endblock %}
 
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
     <!-- Container for the product cards -->
     <div class="product-grid">
         {% for product in products %}
@@ -90,12 +51,6 @@
             </div>
             
         </form>
+        <script src="{% static 'js/home.js' %}"></script>
         {% endfor %}
-    </div>
-
-
-    <script src="{% static 'js/canvas-animation.js' %}"></script>
-    <script src="{% static 'js/home.js' %}"></script>
-</body>
-
-</html>
+{% endblock %}

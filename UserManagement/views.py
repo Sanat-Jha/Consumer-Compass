@@ -9,7 +9,7 @@ from UserManagement.models import Consumer
 def home(request,cat):
     context = {
         "cat":cat,
-        'products':  Product.objects.filter(category__name=cat),
+        'products':  Product.objects.order_by('-ccscore').filter(category__name=cat),
         "categories": Category.objects.all()
     }
     if request.user.is_authenticated:
@@ -22,9 +22,11 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('home')
+            return redirect('home','Laptop')
     else:
         form = ConsumerRegistrationForm()
+    if request.user.is_authenticated:
+        return render(request, 'register.html', {'form': form, "consumer":Consumer.objects.get(username=request.user.username)})
     return render(request, 'register.html', {'form': form})
 
 def login_view(request):
@@ -39,6 +41,8 @@ def login_view(request):
                 return redirect('home',"Laptop")
     else:
         form = ConsumerLoginForm()
+    if request.user.is_authenticated:
+        return render(request, 'login.html', {'form': form, "consumer":Consumer.objects.get(username=request.user.username)})
     return render(request, 'login.html', {'form': form})
 
 def logout_view(request):

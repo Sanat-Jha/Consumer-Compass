@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.shortcuts import redirect, render
 
-from ProductManagement.models import Product
+from ProductManagement.models import Category, Product
 from ReviewManagement.models import Review
 from UserManagement.models import Consumer
 
@@ -19,8 +19,11 @@ def writereview(request,producttitle):
             l = len(Review.objects.filter(product=product))
             product.ccscore = (product.ccscore*(l-1) + rating)/l
             product.save()
-
+        if request.user.is_authenticated:
+            return render(request, 'writereview.html',{'product':product, 'redirect':True,"consumer":Consumer.objects.get(username=request.user.username),"categories":Category.objects.all()})
         return render(request, 'writereview.html',{'product':product, 'redirect':True})
+    if request.user.is_authenticated:
+        return render(request, 'writereview.html',{'product':product, 'redirect':False,"consumer":Consumer.objects.get(username=request.user.username),"categories":Category.objects.all()})
     return render(request, 'writereview.html',{'product':product, 'redirect':False})
 
 
@@ -46,3 +49,25 @@ def editreview(request):
 
     return JsonResponse({'success': False, 'error': 'Invalid request'})
 
+def changeapproval(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        username = data.get('username')
+        reviewusername = data.get('reviewusername')
+        print(username)
+        product_title = data.get('product_title')
+        print(product_title)
+        approve = data.get('approve')
+        print(approve)
+
+        # Find the review by username and product
+        
+        review = Review.objects.get(consumer=Consumer.objects.get(username=reviewusername), product=Product.objects.get(title=product_title))
+        review.toggle_approval(username)
+        review.save()
+
+        # Return success response
+        return JsonResponse({'success': True,'approve':approve,'username':username, "approvescore":review.approvalscore})
+
+
+    return JsonResponse({'success': False, 'error': 'Invalid request'})
